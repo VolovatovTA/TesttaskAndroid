@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/background_back_btn.xml" value="0.175" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/gradint_under_image.xml" value="0.13703703703703704" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/green_circle.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/ic_baseline_arrow_back_24_another.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/ic_baseline_arrow_back_24_black.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/ic_baseline_arrow_back_24_true.xml" value="0.25833333333333336" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/ic_baseline_arrow_back_24_white.xml" value="0.16944444444444445" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/ic_baseline_arrow_drop_down_circle_24.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/img_state.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/oval_item.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/red_circle.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/drawable/text_view_with_circle.xml" value="0.2703125" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout-v23/fragment_details.xml" value="0.21574074074074073" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout/fragment_blank.xml" value="0.25416666666666665" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout/fragment_details.xml" value="0.264" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout/item_in_recycler_vew.xml" value="0.25416666666666665" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout/item_in_recyler_vew.xml" value="0.264" />
+        <entry key="..\:/PROJECTS/TesttaskAndroid/app/src/main/res/layout/list_fragment.xml" value="0.264" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

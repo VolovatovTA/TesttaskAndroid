@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/oval_item">
+
+    <com.example.testtaskandroid.implements.RoundedCornerLayout
+
+        android:layout_width="150dp"
+        android:layout_height="150dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:background="@drawable/oval_item"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/in_this_place_will_be_avatar_of_character" />
+
+    </com.example.testtaskandroid.implements.RoundedCornerLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:singleLine="true"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/Status_in_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_small_size"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:singleLine="true"
+            android:layout_marginBottom="8dp"
+            app:drawableLeftCompat="@drawable/white_circle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_small_size"
+
+            android:textColor="@color/dark_color_textView"
+            android:text="@string/last_known_location" />
+
+        <TextView
+            android:id="@+id/Last_seen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_big_size"
+            android:textColor="@color/white"
+            android:singleLine="true"
+
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_small_size"
+
+            android:textColor="@color/dark_color_textView"
+            android:text="@string/first_seen_in" />
+
+        <TextView
+            android:id="@+id/First_seen_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_big_size"
+            android:textColor="@color/white"
+            android:singleLine="true"
+ />
+    </LinearLayout>
+</LinearLayout>

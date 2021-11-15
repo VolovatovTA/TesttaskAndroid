@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Test task Android</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="last_known_location">Last known location:</string>
+    <string name="first_seen_in">First seen in:</string>
+    <string name="in_this_place_will_be_avatar_of_character">In this place will be avatar of character</string>
+    <string name="details_photo_of_character">Show the details photo of characters</string>
+    <string name="gender">Gender:</string>
+    <string name="origin_in_details">Origin:</string>
+    <string name="location_in_details">Location:</string>
+    <string name="type_in_details">Type:</string>
+    <string name="dimension_in_details">Dimension:</string>
+    <string name="episodes_in_details">Episodes:</string>
+    <string name="back_button">back button</string>
+</resources>
