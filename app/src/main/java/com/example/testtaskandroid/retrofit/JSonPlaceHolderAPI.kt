@@ -15,7 +15,7 @@ interface JSonPlaceHolderAPI {
     fun getEpisodeName(@Path("ep") ep: Int): Observable<EpisodeName>
 
     @GET("location/{id}")
-    fun getLocationById(@Path("id") id: Int): Call<ResultLocation>
+    fun getLocationById(@Path("id") id: Int): Observable<ResultLocation>
 
 
 }

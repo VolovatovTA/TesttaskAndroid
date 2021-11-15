@@ -2,6 +2,7 @@ package com.example.testtaskandroid.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testtaskandroid.R
 import com.example.testtaskandroid.databinding.ListFragmentBinding
 import com.example.testtaskandroid.recycler_view.MyItemRecyclerViewAdapter
+import com.example.testtaskandroid.recycler_view.PlaceholderContent
 
 class ListFragment : Fragment() {
 
@@ -25,12 +27,15 @@ class ListFragment : Fragment() {
         binding = ListFragmentBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
 
-        viewModel.loadFirstPage()
+        if (PlaceholderContent.ITEMS.isEmpty()){
+            viewModel.loadFirstPage()
+        }
 
         val myAdapter = MyItemRecyclerViewAdapter(requireContext(), viewModel)
         myAdapter.setOnItemClickListener(object : MyItemRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View?, position: Int) {
                 // Launch a details fragment
+
                 val detailsFragment = BlankFragment(position)
                 val transactionFragments =
                     requireActivity().supportFragmentManager.beginTransaction()
@@ -63,7 +68,6 @@ class ListFragment : Fragment() {
                 listFormState.isCharactersAdd -> {
                     binding.progressBar.visibility = View.GONE
                     myAdapter.notifyAboutData()
-
                 }
             }
         })

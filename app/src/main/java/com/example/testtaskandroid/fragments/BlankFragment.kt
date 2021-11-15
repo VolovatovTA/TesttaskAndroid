@@ -32,8 +32,13 @@ class BlankFragment(position: Int) : Fragment() {
     ): View {
         binding = FragmentBlankBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
-        val idOfLocation = PlaceholderContent.ITEMS[currentPosition].character.location.url.split("location/")[1].toInt()
-        viewModel.getLocationById(idOfLocation)
+        if (PlaceholderContent.ITEMS[currentPosition].character.location.url != ""){
+            val idOfLocation = PlaceholderContent.ITEMS[currentPosition].character.location.url.split("location/")[1].toInt()
+            viewModel.getLocationById(idOfLocation)
+        } else{
+            viewModel.getLocationById(-1)
+        }
+
         binding.imgB.setOnClickListener { requireActivity().onBackPressed() }
 
 
@@ -41,7 +46,7 @@ class BlankFragment(position: Int) : Fragment() {
                 detailsFormState ->
             when {
                 detailsFormState == null -> return@Observer
-                detailsFormState.isAddingInfoAboutLocation -> {
+                detailsFormState.isInfoAboutLocationLoaded -> {
                     fillInterfaceByData(viewModel.location)
 
                 }

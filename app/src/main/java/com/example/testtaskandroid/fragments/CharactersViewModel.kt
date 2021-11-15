@@ -1,6 +1,5 @@
 package com.example.testtaskandroid.fragments
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,15 +14,12 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CharactersViewModel : ViewModel() {
     var countItems: Int = 0
     var currentPage: Int = 1
     var pageCount: Int? = 0
-    lateinit var location: ResultLocation
+    var location: ResultLocation = ResultLocation(id = -1, name = "unknown", type = "unknown", dimension = "unknown", residents = emptyList())
 
     private val _listForm = MutableLiveData<ListFormState>()
     val listFormState: LiveData<ListFormState> = _listForm
@@ -44,24 +40,32 @@ class CharactersViewModel : ViewModel() {
 
 
     fun getLocationById(id: Int) {
-        _detailsForm.value = DetailsFormState(isAddingInfoAboutLocation = false)
+        if (id != -1){
+            _detailsForm.value = DetailsFormState(isInfoAboutLocationLoaded = false)
 
-        retrofitService.getLocationById(id).enqueue(object : Callback<ResultLocation> {
-            override fun onResponse(
-                call: Call<ResultLocation>,
-                response: Response<ResultLocation>
-            ) {
+            retrofitService.getLocationById(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<ResultLocation> {
+                    override fun onSubscribe(d: Disposable) {}
 
-                if (response.code() == 200) {
-                    location = response.body()!!
-                    _detailsForm.value = DetailsFormState(isAddingInfoAboutLocation = true)
-                }
-            }
+                    override fun onNext(t: ResultLocation) {
+                        location = t
+                    }
 
-            override fun onFailure(call: Call<ResultLocation>, t: Throwable) {
-            }
+                    override fun onComplete() {
+                        _detailsForm.value = DetailsFormState(isInfoAboutLocationLoaded = true)
+                    }
 
-        })
+                    override fun onError(e: Throwable) {}
+                })
+        }
+        else{
+            location = ResultLocation(id = -1, name = "unknown", type = "unknown", dimension = "unknown", residents = emptyList())
+            _detailsForm.value = DetailsFormState(isInfoAboutLocationLoaded = true)
+
+        }
+
     }
 
 
@@ -69,7 +73,7 @@ class CharactersViewModel : ViewModel() {
         _listForm.value = ListFormState(
             isEmptyListCharacters = true
         )
-        getCharactersPage(currentPage)
+        getCharactersPage(1)
             .flatMap { response ->
                 pageCount = response.infoPOJO.pages
                 countItems = response.results.size
@@ -106,7 +110,6 @@ class CharactersViewModel : ViewModel() {
 
     fun appendCharacters() {
         currentPage++
-        Log.d("Timofey", currentPage.toString())
         _listForm.value = ListFormState(isAddingCharacters = true)
 
         getCharactersPage(currentPage)
@@ -150,6 +153,6 @@ class CharactersViewModel : ViewModel() {
 }
 
 class DetailsFormState(
-    val isAddingInfoAboutLocation: Boolean = false
+    val isInfoAboutLocationLoaded: Boolean = false
 
 )
