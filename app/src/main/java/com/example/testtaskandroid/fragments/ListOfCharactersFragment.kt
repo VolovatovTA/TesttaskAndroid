@@ -29,25 +29,29 @@ class ListOfCharactersFragment : Fragment() {
             viewModel.loadFirstPage()
         }
 
-        val adapterCharactersInRecyclerView = CharactersRecyclerViewAdapter(requireContext(), viewModel)
-        adapterCharactersInRecyclerView.setOnItemClickListener(object : CharactersRecyclerViewAdapter.OnItemClickListener {
-            override fun onItemClick(view: View?, position: Int) {
-                // Launch a details fragment
+        val adapterCharactersInRecyclerView = CharactersRecyclerViewAdapter(viewModel)
 
-                val detailsFragment = FragmentDetails(position)
-                val transactionFragments =
-                    requireActivity().supportFragmentManager.beginTransaction()
+        adapterCharactersInRecyclerView.setOnItemClickListener{
+            position ->
+            // Launch a details fragment
 
-                transactionFragments.replace(R.id.fragmentContainerView, detailsFragment)
-                transactionFragments.addToBackStack("list in previous state")
-                transactionFragments.commit()
-            }
+            val detailsFragment = FragmentDetails(position)
+            val transactionFragments =
+                requireActivity().supportFragmentManager.beginTransaction()
 
-        })
+            transactionFragments.replace(R.id.fragmentContainerView, detailsFragment)
+            transactionFragments.addToBackStack("list in previous state")
+            transactionFragments.commit()
+        }
+
+
         val linearLayoutManager = LinearLayoutManager(requireContext())
         with(binding.recyclerView) {
             layoutManager = linearLayoutManager
             adapter = adapterCharactersInRecyclerView
+            setOnClickListener {
+
+            }
         }
         viewModel.listFormState.observe(viewLifecycleOwner, Observer { listFormState ->
             when {
@@ -65,7 +69,7 @@ class ListOfCharactersFragment : Fragment() {
                 }
                 listFormState.isCharactersLoaded -> {
                     binding.progressBar.visibility = View.GONE
-                    adapterCharactersInRecyclerView.notifyAboutData()
+                    adapterCharactersInRecyclerView.notifyAboutData(listFormState.countLoadedCharacters)
                 }
             }
         })

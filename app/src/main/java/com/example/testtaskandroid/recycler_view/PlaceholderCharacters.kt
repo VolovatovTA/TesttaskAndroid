@@ -7,13 +7,13 @@ object PlaceholderCharacters {
 
     val CHARACTERS: MutableList<PlaceholderItem> = ArrayList()
 
-    fun addItem(item: PlaceholderItem) {
+    fun addCharacter(item: PlaceholderItem) {
         CHARACTERS.add(item)
     }
 
-    data class PlaceholderItem(val character: Character, val nameOfFirstEpisode: String) {
+    data class PlaceholderItem(val character: Character) {
 
         override fun toString(): String =
-            "PlaceHolderItem{character = $character; nameOfFirstEpisode = $nameOfFirstEpisode; }"
+            "PlaceHolderItem{character = $character }"
     }
 }

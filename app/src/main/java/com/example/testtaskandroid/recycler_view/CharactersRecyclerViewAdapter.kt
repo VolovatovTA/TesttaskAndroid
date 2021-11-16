@@ -2,37 +2,35 @@ package com.example.testtaskandroid.recycler_view
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.testtaskandroid.R
-import com.example.testtaskandroid.databinding.ItemInRecyclerVewBinding
+import com.example.testtaskandroid.databinding.ItemInRecyclerViewBinding
 import com.example.testtaskandroid.fragments.CharactersViewModel
 
-class CharactersRecyclerViewAdapter(context: Context, viewModel: CharactersViewModel) : RecyclerView.Adapter<CharactersRecyclerViewAdapter.MyViewHolder>() {
+class CharactersRecyclerViewAdapter(private val viewModel: CharactersViewModel) : RecyclerView.Adapter<CharactersRecyclerViewAdapter.MyViewHolder>() {
 
-    private val fvv = context
-    val viewModel = viewModel
+    private lateinit var context: Context
     private val idWhiteUnknown = R.drawable.white_circle
     private val idRedDead = R.drawable.red_circle
     private val idGreenAlive = R.drawable.green_circle
-    private lateinit var itemClickListener: OnItemClickListener
+
+    private lateinit var itemClickListener: ((pos: Int) -> Unit)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
+        context = parent.context
         return MyViewHolder(
-            ItemInRecyclerVewBinding.inflate(
+            ItemInRecyclerViewBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-
         )
-
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -43,11 +41,11 @@ class CharactersRecyclerViewAdapter(context: Context, viewModel: CharactersViewM
 
         val item = PlaceholderCharacters.CHARACTERS[position]
 
-        holder.firstSeen.text = item.nameOfFirstEpisode
+        holder.firstSeen.text = item.character.nameOfFirstEpisode
         holder.lastSeen.text = item.character.location.name
         holder.status.text = (" " + item.character.status + " - " + item.character.species)
         holder.name.text = item.character.name
-        Glide.with(fvv)
+        Glide.with(context)
             .load(item.character.image)
             .into(holder.image)
 
@@ -58,25 +56,19 @@ class CharactersRecyclerViewAdapter(context: Context, viewModel: CharactersViewM
         }
     }
 
-    fun notifyAboutData() {
-        notifyDataSetChanged()
-        notifyItemRangeChanged(PlaceholderCharacters.CHARACTERS.size, itemCount)
+    fun notifyAboutData(countInserted: Int) {
+        notifyItemRangeInserted(viewModel.countItems - countInserted, countInserted)
     }
 
     override fun getItemCount(): Int = PlaceholderCharacters.CHARACTERS.size
 
 
-    interface OnItemClickListener {
-        fun onItemClick(view: View?, position: Int)
+    fun setOnItemClickListener(onItemClickListener: (pos: Int) -> Unit) {
+        this.itemClickListener = onItemClickListener
     }
 
 
-    fun setOnItemClickListener(mItemClickListener: OnItemClickListener) {
-        this.itemClickListener = mItemClickListener
-    }
-
-
-    inner class MyViewHolder(binding: ItemInRecyclerVewBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class MyViewHolder(binding: ItemInRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root){
 
         val firstSeen: TextView = binding.FirstSeenIn
         val lastSeen: TextView = binding.LastSeen
@@ -84,22 +76,14 @@ class CharactersRecyclerViewAdapter(context: Context, viewModel: CharactersViewM
         val status: TextView = binding.StatusInItem
         val image: ImageView = binding.imageView
         init {
-            binding.root.setOnClickListener(this)
+            binding.root.setOnClickListener{
+                itemClickListener.invoke(adapterPosition)
+            }
         }
 
 
         override fun toString(): String {
             return super.toString() + " {firstSeen = ${firstSeen.text}; lastSeen = ${lastSeen.text}; name = ${name.text}; status = ${status.text}; image = $image}"
         }
-
-
-        override fun onClick(p0: View?) {
-            itemClickListener.onItemClick(p0, adapterPosition)
-        }
-
-
-
     }
-
-
 }

@@ -14,11 +14,14 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlin.properties.Delegates
 
 class CharactersViewModel : ViewModel() {
     var countItems: Int = 0
     var currentPage: Int = 1
     var pageCount: Int? = 0
+    var countCharacterInPage by Delegates.notNull<Int>()
+
     var location: ResultLocation = ResultLocation(id = -1, name = "unknown", type = "unknown", dimension = "unknown", residents = emptyList())
 
     private val _listForm = MutableLiveData<ListFormState>()
@@ -77,16 +80,17 @@ class CharactersViewModel : ViewModel() {
             .flatMap { response ->
                 pageCount = response.infoPOJO.pages
                 countItems = response.results.size
-                Observable.fromIterable(response.results)
+                countCharacterInPage = response.results.size
+                    Observable.fromIterable(response.results)
             }
             .flatMap({
                 getEpisodeName(it.episode[0].split("episode/")[1].toInt())
             },
                 { results, name ->
-                    PlaceholderCharacters.addItem(
+                    results.nameOfFirstEpisode = name.name
+                    PlaceholderCharacters.addCharacter(
                         PlaceholderCharacters.PlaceholderItem(
-                            results,
-                            name.name
+                            results
                         )
                     )
 
@@ -99,7 +103,10 @@ class CharactersViewModel : ViewModel() {
                 override fun onNext(t: Unit) {}
 
                 override fun onComplete() {
-                    _listForm.value = ListFormState(allIsGood = true)
+                    _listForm.value = ListFormState(
+                        allIsGood = true,
+                        countLoadedCharacters = countCharacterInPage
+                    )
                 }
 
                 override fun onError(e: Throwable) {}
@@ -110,20 +117,23 @@ class CharactersViewModel : ViewModel() {
 
     fun appendCharacters() {
         currentPage++
-        _listForm.value = ListFormState(isCharactersLoading = true)
+        _listForm.value = ListFormState(
+            isCharactersLoading = true
+        )
 
         getCharactersPage(currentPage)
             .flatMap { response ->
+                countCharacterInPage = response.results.size
                 Observable.fromIterable(response.results)
             }
             .flatMap({
                 getEpisodeName(it.episode[0].split("episode/")[1].toInt())
             },
                 { results, name ->
-                    PlaceholderCharacters.addItem(
+                    results.nameOfFirstEpisode = name.name
+                    PlaceholderCharacters.addCharacter(
                         PlaceholderCharacters.PlaceholderItem(
-                            results,
-                            name.name
+                            results
                         )
                     )
                 })
@@ -136,7 +146,7 @@ class CharactersViewModel : ViewModel() {
 
                 override fun onComplete() {
                     countItems = PlaceholderCharacters.CHARACTERS.size
-                    _listForm.value = ListFormState(isCharactersLoaded = true)
+                    _listForm.value = ListFormState(isCharactersLoaded = true, countLoadedCharacters = countCharacterInPage)
                 }
 
                 override fun onError(e: Throwable) {}
@@ -148,7 +158,8 @@ class CharactersViewModel : ViewModel() {
         val allIsGood: Boolean = false,
         val isEmptyCharactersList: Boolean = false,
         val isCharactersLoading: Boolean = false,
-        val isCharactersLoaded: Boolean = false
+        val isCharactersLoaded: Boolean = false,
+        val countLoadedCharacters: Int = 0
     )
 }
 
