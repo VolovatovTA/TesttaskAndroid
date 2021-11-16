@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.testtaskandroid.R
 import com.example.testtaskandroid.data.ResultLocation
-import com.example.testtaskandroid.databinding.FragmentBlankBinding
-import com.example.testtaskandroid.recycler_view.PlaceholderContent
+import com.example.testtaskandroid.databinding.FragmentDetailsBinding
+import com.example.testtaskandroid.recycler_view.PlaceholderCharacters
 
 
-class BlankFragment(position: Int) : Fragment() {
-    lateinit var binding: FragmentBlankBinding
+class FragmentDetails(position: Int) : Fragment() {
+    lateinit var binding: FragmentDetailsBinding
     lateinit var viewModel: CharactersViewModel
     private val currentPosition = position
 
@@ -30,10 +30,10 @@ class BlankFragment(position: Int) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBlankBinding.inflate(layoutInflater)
+        binding = FragmentDetailsBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
-        if (PlaceholderContent.ITEMS[currentPosition].character.location.url != ""){
-            val idOfLocation = PlaceholderContent.ITEMS[currentPosition].character.location.url.split("location/")[1].toInt()
+        if (PlaceholderCharacters.CHARACTERS[currentPosition].character.location.url != ""){
+            val idOfLocation = PlaceholderCharacters.CHARACTERS[currentPosition].character.location.url.split("location/")[1].toInt()
             viewModel.getLocationById(idOfLocation)
         } else{
             viewModel.getLocationById(-1)
@@ -47,7 +47,7 @@ class BlankFragment(position: Int) : Fragment() {
             when {
                 detailsFormState == null -> return@Observer
                 detailsFormState.isInfoAboutLocationLoaded -> {
-                    fillInterfaceByData(viewModel.location)
+                    fillFragmentWithData(viewModel.location)
 
                 }
             }
@@ -55,8 +55,8 @@ class BlankFragment(position: Int) : Fragment() {
         return binding.root
     }
 
-    private fun fillInterfaceByData(location: ResultLocation) {
-        val character = PlaceholderContent.ITEMS[currentPosition].character
+    private fun fillFragmentWithData(location: ResultLocation) {
+        val character = PlaceholderCharacters.CHARACTERS[currentPosition].character
         with(binding){
             NameInDetails.text = character.name
             StatusInDetails.text = (" " + character.status + " - " + character.species)
@@ -74,7 +74,7 @@ class BlankFragment(position: Int) : Fragment() {
         }
 
         Glide.with(requireContext())
-            .load(PlaceholderContent.ITEMS[currentPosition].character.image)
+            .load(PlaceholderCharacters.CHARACTERS[currentPosition].character.image)
             .optionalCenterCrop()
             .into(binding.imageViewInDetails)
     }

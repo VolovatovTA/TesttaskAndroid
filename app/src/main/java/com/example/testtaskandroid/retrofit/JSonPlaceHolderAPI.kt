@@ -6,11 +6,9 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface JSonPlaceHolderAPI {
-    // Characters
     @GET("character")
     fun getCharactersPage(@Query("page") page: Int): Observable<CharacterResponse>
 
-    // Location
     @GET("episode/{ep}")
     fun getEpisodeName(@Path("ep") ep: Int): Observable<EpisodeName>
 

@@ -12,7 +12,7 @@ import com.example.testtaskandroid.R
 import com.example.testtaskandroid.databinding.ItemInRecyclerVewBinding
 import com.example.testtaskandroid.fragments.CharactersViewModel
 
-class MyItemRecyclerViewAdapter(context: Context, viewModel: CharactersViewModel) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.MyViewHolder>() {
+class CharactersRecyclerViewAdapter(context: Context, viewModel: CharactersViewModel) : RecyclerView.Adapter<CharactersRecyclerViewAdapter.MyViewHolder>() {
 
     private val fvv = context
     val viewModel = viewModel
@@ -41,7 +41,7 @@ class MyItemRecyclerViewAdapter(context: Context, viewModel: CharactersViewModel
             viewModel.appendCharacters()
         }
 
-        val item = PlaceholderContent.ITEMS[position]
+        val item = PlaceholderCharacters.CHARACTERS[position]
 
         holder.firstSeen.text = item.nameOfFirstEpisode
         holder.lastSeen.text = item.character.location.name
@@ -60,10 +60,10 @@ class MyItemRecyclerViewAdapter(context: Context, viewModel: CharactersViewModel
 
     fun notifyAboutData() {
         notifyDataSetChanged()
-        notifyItemRangeChanged(PlaceholderContent.ITEMS.size, itemCount)
+        notifyItemRangeChanged(PlaceholderCharacters.CHARACTERS.size, itemCount)
     }
 
-    override fun getItemCount(): Int = PlaceholderContent.ITEMS.size
+    override fun getItemCount(): Int = PlaceholderCharacters.CHARACTERS.size
 
 
     interface OnItemClickListener {

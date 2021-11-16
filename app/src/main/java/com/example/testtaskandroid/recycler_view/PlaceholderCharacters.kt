@@ -3,12 +3,12 @@ package com.example.testtaskandroid.recycler_view
 import com.example.testtaskandroid.data.Character
 import java.util.*
 
-object PlaceholderContent {
+object PlaceholderCharacters {
 
-    val ITEMS: MutableList<PlaceholderItem> = ArrayList()
+    val CHARACTERS: MutableList<PlaceholderItem> = ArrayList()
 
     fun addItem(item: PlaceholderItem) {
-        ITEMS.add(item)
+        CHARACTERS.add(item)
     }
 
     data class PlaceholderItem(val character: Character, val nameOfFirstEpisode: String) {

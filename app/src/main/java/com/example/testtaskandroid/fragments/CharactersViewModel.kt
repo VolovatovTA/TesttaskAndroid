@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.testtaskandroid.data.CharacterResponse
 import com.example.testtaskandroid.data.EpisodeName
 import com.example.testtaskandroid.data.ResultLocation
-import com.example.testtaskandroid.recycler_view.PlaceholderContent
+import com.example.testtaskandroid.recycler_view.PlaceholderCharacters
 import com.example.testtaskandroid.retrofit.JSonPlaceHolderAPI
 import com.example.testtaskandroid.retrofit.NetworkService
 import io.reactivex.Observable
@@ -71,7 +71,7 @@ class CharactersViewModel : ViewModel() {
 
     fun loadFirstPage() {
         _listForm.value = ListFormState(
-            isEmptyListCharacters = true
+            isEmptyCharactersList = true
         )
         getCharactersPage(1)
             .flatMap { response ->
@@ -83,8 +83,8 @@ class CharactersViewModel : ViewModel() {
                 getEpisodeName(it.episode[0].split("episode/")[1].toInt())
             },
                 { results, name ->
-                    PlaceholderContent.addItem(
-                        PlaceholderContent.PlaceholderItem(
+                    PlaceholderCharacters.addItem(
+                        PlaceholderCharacters.PlaceholderItem(
                             results,
                             name.name
                         )
@@ -110,7 +110,7 @@ class CharactersViewModel : ViewModel() {
 
     fun appendCharacters() {
         currentPage++
-        _listForm.value = ListFormState(isAddingCharacters = true)
+        _listForm.value = ListFormState(isCharactersLoading = true)
 
         getCharactersPage(currentPage)
             .flatMap { response ->
@@ -120,8 +120,8 @@ class CharactersViewModel : ViewModel() {
                 getEpisodeName(it.episode[0].split("episode/")[1].toInt())
             },
                 { results, name ->
-                    PlaceholderContent.addItem(
-                        PlaceholderContent.PlaceholderItem(
+                    PlaceholderCharacters.addItem(
+                        PlaceholderCharacters.PlaceholderItem(
                             results,
                             name.name
                         )
@@ -135,8 +135,8 @@ class CharactersViewModel : ViewModel() {
                 override fun onNext(t: Unit) {}
 
                 override fun onComplete() {
-                    countItems = PlaceholderContent.ITEMS.size
-                    _listForm.value = ListFormState(isCharactersAdd = true)
+                    countItems = PlaceholderCharacters.CHARACTERS.size
+                    _listForm.value = ListFormState(isCharactersLoaded = true)
                 }
 
                 override fun onError(e: Throwable) {}
@@ -146,9 +146,9 @@ class CharactersViewModel : ViewModel() {
 
     data class ListFormState(
         val allIsGood: Boolean = false,
-        val isEmptyListCharacters: Boolean = false,
-        val isAddingCharacters: Boolean = false,
-        val isCharactersAdd: Boolean = false
+        val isEmptyCharactersList: Boolean = false,
+        val isCharactersLoading: Boolean = false,
+        val isCharactersLoaded: Boolean = false
     )
 }
 

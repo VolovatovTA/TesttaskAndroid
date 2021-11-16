@@ -2,7 +2,6 @@ package com.example.testtaskandroid.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,33 +9,32 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testtaskandroid.R
-import com.example.testtaskandroid.databinding.ListFragmentBinding
-import com.example.testtaskandroid.recycler_view.MyItemRecyclerViewAdapter
-import com.example.testtaskandroid.recycler_view.PlaceholderContent
+import com.example.testtaskandroid.databinding.ListOfCharactersFragmentBinding
+import com.example.testtaskandroid.recycler_view.CharactersRecyclerViewAdapter
+import com.example.testtaskandroid.recycler_view.PlaceholderCharacters
 
-class ListFragment : Fragment() {
+class ListOfCharactersFragment : Fragment() {
 
-    private lateinit var binding: ListFragmentBinding
-
+    private lateinit var binding: ListOfCharactersFragmentBinding
     private lateinit var viewModel: CharactersViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ListFragmentBinding.inflate(layoutInflater, container, false)
+        binding = ListOfCharactersFragmentBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
 
-        if (PlaceholderContent.ITEMS.isEmpty()){
+        if (PlaceholderCharacters.CHARACTERS.isEmpty()){
             viewModel.loadFirstPage()
         }
 
-        val myAdapter = MyItemRecyclerViewAdapter(requireContext(), viewModel)
-        myAdapter.setOnItemClickListener(object : MyItemRecyclerViewAdapter.OnItemClickListener {
+        val adapterCharactersInRecyclerView = CharactersRecyclerViewAdapter(requireContext(), viewModel)
+        adapterCharactersInRecyclerView.setOnItemClickListener(object : CharactersRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View?, position: Int) {
                 // Launch a details fragment
 
-                val detailsFragment = BlankFragment(position)
+                val detailsFragment = FragmentDetails(position)
                 val transactionFragments =
                     requireActivity().supportFragmentManager.beginTransaction()
 
@@ -46,10 +44,10 @@ class ListFragment : Fragment() {
             }
 
         })
-        val myLayoutManager = LinearLayoutManager(requireContext())
+        val linearLayoutManager = LinearLayoutManager(requireContext())
         with(binding.recyclerView) {
-            layoutManager = myLayoutManager
-            adapter = myAdapter
+            layoutManager = linearLayoutManager
+            adapter = adapterCharactersInRecyclerView
         }
         viewModel.listFormState.observe(viewLifecycleOwner, Observer { listFormState ->
             when {
@@ -58,16 +56,16 @@ class ListFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     binding.recyclerView.visibility = View.VISIBLE
                 }
-                listFormState.isEmptyListCharacters -> {
+                listFormState.isEmptyCharactersList -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.recyclerView.visibility = View.GONE
                 }
-                listFormState.isAddingCharacters -> {
+                listFormState.isCharactersLoading -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
-                listFormState.isCharactersAdd -> {
+                listFormState.isCharactersLoaded -> {
                     binding.progressBar.visibility = View.GONE
-                    myAdapter.notifyAboutData()
+                    adapterCharactersInRecyclerView.notifyAboutData()
                 }
             }
         })
