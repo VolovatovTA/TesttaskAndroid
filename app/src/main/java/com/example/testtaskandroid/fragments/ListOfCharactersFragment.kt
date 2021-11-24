@@ -1,35 +1,41 @@
 package com.example.testtaskandroid.fragments
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testtaskandroid.R
+import com.example.testtaskandroid.dagger.MyApplication
 import com.example.testtaskandroid.databinding.ListOfCharactersFragmentBinding
 import com.example.testtaskandroid.recycler_view.CharactersRecyclerViewAdapter
 import com.example.testtaskandroid.recycler_view.PlaceholderCharacters
+import javax.inject.Inject
 
 class ListOfCharactersFragment : Fragment() {
 
     private lateinit var binding: ListOfCharactersFragmentBinding
-    private lateinit var viewModel: CharactersViewModel
+    @Inject lateinit var viewModel: CharactersViewModel
+    @Inject lateinit var adapterCharactersInRecyclerView:CharactersRecyclerViewAdapter
+    @Inject lateinit var placeholderCharacters: PlaceholderCharacters
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireContext().applicationContext as MyApplication).appComponent.inject(this)
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = ListOfCharactersFragmentBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
 
-        if (PlaceholderCharacters.CHARACTERS.isEmpty()){
+        if (placeholderCharacters.CHARACTERS.isEmpty()){
             viewModel.loadFirstPage()
         }
-
-        val adapterCharactersInRecyclerView = CharactersRecyclerViewAdapter(viewModel)
 
         adapterCharactersInRecyclerView.setOnItemClickListener{
             position ->
@@ -69,7 +75,7 @@ class ListOfCharactersFragment : Fragment() {
                 }
                 listFormState.isCharactersLoaded -> {
                     binding.progressBar.visibility = View.GONE
-                    adapterCharactersInRecyclerView.notifyAboutData(listFormState.countLoadedCharacters)
+                    adapterCharactersInRecyclerView.notifyDataInserted(listFormState.countLoadedCharacters)
                 }
             }
         })

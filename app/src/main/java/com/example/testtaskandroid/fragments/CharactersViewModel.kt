@@ -8,19 +8,22 @@ import com.example.testtaskandroid.data.EpisodeName
 import com.example.testtaskandroid.data.ResultLocation
 import com.example.testtaskandroid.recycler_view.PlaceholderCharacters
 import com.example.testtaskandroid.retrofit.JSonPlaceHolderAPI
-import com.example.testtaskandroid.retrofit.NetworkService
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.properties.Delegates
 
-class CharactersViewModel : ViewModel() {
+@Singleton
+class CharactersViewModel @Inject constructor(var retrofitService : JSonPlaceHolderAPI, var placeholderCharacters: PlaceholderCharacters)  : ViewModel() {
     var countItems: Int = 0
     var currentPage: Int = 1
     var pageCount: Int? = 0
     var countCharacterInPage by Delegates.notNull<Int>()
+
 
     var location: ResultLocation = ResultLocation(id = -1, name = "unknown", type = "unknown", dimension = "unknown", residents = emptyList())
 
@@ -29,8 +32,6 @@ class CharactersViewModel : ViewModel() {
 
     private val _detailsForm = MutableLiveData<DetailsFormState>()
     val detailsFormState: LiveData<DetailsFormState> = _detailsForm
-
-    private val retrofitService: JSonPlaceHolderAPI = NetworkService.jSonPlaceHolderAPI
 
     private fun getCharactersPage(page: Int): Observable<CharacterResponse> {
         return retrofitService.getCharactersPage(page)
@@ -88,7 +89,7 @@ class CharactersViewModel : ViewModel() {
             },
                 { results, name ->
                     results.nameOfFirstEpisode = name.name
-                    PlaceholderCharacters.addCharacter(
+                    placeholderCharacters.addCharacter(
                         PlaceholderCharacters.PlaceholderItem(
                             results
                         )
@@ -131,7 +132,7 @@ class CharactersViewModel : ViewModel() {
             },
                 { results, name ->
                     results.nameOfFirstEpisode = name.name
-                    PlaceholderCharacters.addCharacter(
+                    placeholderCharacters.addCharacter(
                         PlaceholderCharacters.PlaceholderItem(
                             results
                         )
@@ -145,7 +146,7 @@ class CharactersViewModel : ViewModel() {
                 override fun onNext(t: Unit) {}
 
                 override fun onComplete() {
-                    countItems = PlaceholderCharacters.CHARACTERS.size
+                    countItems = placeholderCharacters.CHARACTERS.size
                     _listForm.value = ListFormState(isCharactersLoaded = true, countLoadedCharacters = countCharacterInPage)
                 }
 

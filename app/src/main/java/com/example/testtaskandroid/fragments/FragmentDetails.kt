@@ -1,5 +1,6 @@
 package com.example.testtaskandroid.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -7,33 +8,33 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.testtaskandroid.R
+import com.example.testtaskandroid.dagger.MyApplication
 import com.example.testtaskandroid.data.ResultLocation
 import com.example.testtaskandroid.databinding.FragmentDetailsBinding
 import com.example.testtaskandroid.recycler_view.PlaceholderCharacters
+import javax.inject.Inject
 
 
 class FragmentDetails(position: Int) : Fragment() {
     lateinit var binding: FragmentDetailsBinding
-    lateinit var viewModel: CharactersViewModel
+    @Inject lateinit var viewModel: CharactersViewModel
+    @Inject lateinit var placeholderCharacters: PlaceholderCharacters
     private val currentPosition = position
 
+    override fun onAttach(context: Context) {
+        (requireContext().applicationContext as MyApplication).appComponent.inject(this)
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
+        super.onAttach(context)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentDetailsBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
-        if (PlaceholderCharacters.CHARACTERS[currentPosition].character.location.url != ""){
-            val idOfLocation = PlaceholderCharacters.CHARACTERS[currentPosition].character.location.url.split("location/")[1].toInt()
+        if (placeholderCharacters.CHARACTERS[currentPosition].character.location.url != ""){
+            val idOfLocation = placeholderCharacters.CHARACTERS[currentPosition].character.location.url.split("location/")[1].toInt()
             viewModel.getLocationById(idOfLocation)
         } else{
             viewModel.getLocationById(-1)
@@ -56,7 +57,7 @@ class FragmentDetails(position: Int) : Fragment() {
     }
 
     private fun fillFragmentWithData(location: ResultLocation) {
-        val character = PlaceholderCharacters.CHARACTERS[currentPosition].character
+        val character = placeholderCharacters.CHARACTERS[currentPosition].character
         with(binding){
             NameInDetails.text = character.name
             StatusInDetails.text = (" " + character.status + " - " + character.species)
@@ -74,7 +75,7 @@ class FragmentDetails(position: Int) : Fragment() {
         }
 
         Glide.with(requireContext())
-            .load(PlaceholderCharacters.CHARACTERS[currentPosition].character.image)
+            .load(placeholderCharacters.CHARACTERS[currentPosition].character.image)
             .optionalCenterCrop()
             .into(binding.imageViewInDetails)
     }

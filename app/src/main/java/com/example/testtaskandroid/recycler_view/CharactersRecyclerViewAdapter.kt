@@ -10,8 +10,9 @@ import com.bumptech.glide.Glide
 import com.example.testtaskandroid.R
 import com.example.testtaskandroid.databinding.ItemInRecyclerViewBinding
 import com.example.testtaskandroid.fragments.CharactersViewModel
+import javax.inject.Inject
 
-class CharactersRecyclerViewAdapter(private val viewModel: CharactersViewModel) : RecyclerView.Adapter<CharactersRecyclerViewAdapter.MyViewHolder>() {
+class CharactersRecyclerViewAdapter @Inject constructor(var viewModel: CharactersViewModel, var placeholderCharacters: PlaceholderCharacters) : RecyclerView.Adapter<CharactersRecyclerViewAdapter.MyViewHolder>() {
 
     private lateinit var context: Context
     private val idWhiteUnknown = R.drawable.white_circle
@@ -39,7 +40,7 @@ class CharactersRecyclerViewAdapter(private val viewModel: CharactersViewModel) 
             viewModel.appendCharacters()
         }
 
-        val item = PlaceholderCharacters.CHARACTERS[position]
+        val item = placeholderCharacters.CHARACTERS[position]
 
         holder.firstSeen.text = item.character.nameOfFirstEpisode
         holder.lastSeen.text = item.character.location.name
@@ -56,11 +57,11 @@ class CharactersRecyclerViewAdapter(private val viewModel: CharactersViewModel) 
         }
     }
 
-    fun notifyAboutData(countInserted: Int) {
+    fun notifyDataInserted(countInserted: Int) {
         notifyItemRangeInserted(viewModel.countItems - countInserted, countInserted)
     }
 
-    override fun getItemCount(): Int = PlaceholderCharacters.CHARACTERS.size
+    override fun getItemCount(): Int = placeholderCharacters.CHARACTERS.size
 
 
     fun setOnItemClickListener(onItemClickListener: (pos: Int) -> Unit) {

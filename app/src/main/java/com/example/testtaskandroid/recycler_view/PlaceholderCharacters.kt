@@ -2,8 +2,11 @@ package com.example.testtaskandroid.recycler_view
 
 import com.example.testtaskandroid.data.Character
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object PlaceholderCharacters {
+@Singleton
+class PlaceholderCharacters @Inject constructor() {
 
     val CHARACTERS: MutableList<PlaceholderItem> = ArrayList()
 
